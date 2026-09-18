@@ -1,0 +1,6 @@
+.env
+.idea/
+api/__pycache__/
+api/venv/
+frontend/node_modules/
+frontend/.next/
