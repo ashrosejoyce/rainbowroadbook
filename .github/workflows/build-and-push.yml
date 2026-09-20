@@ -16,3 +16,5 @@ jobs:
       - run: gcloud auth configure-docker us-central1-docker.pkg.dev
       - run: docker build -t us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/api:${{ github.sha }} ./api
       - run: docker push us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/api:${{ github.sha }}
+      - run: docker build -t us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/frontend:${{ github.sha }} ./frontend -f frontend/Dockerfile.prod
+      - run: docker push us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/frontend:${{ github.sha }}
