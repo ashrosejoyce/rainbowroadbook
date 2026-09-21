@@ -1,0 +1,22 @@
+name: Deploy Prod
+on:
+  workflow_dispatch:
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: google-github-actions/auth@v3.0.0
+        with:
+          workload_identity_provider: projects/523773459301/locations/global/workloadIdentityPools/rainbowroadbook-github/providers/rainbowroadbook-github-actions
+          service_account: rainbowroadbook-ci@agile-vortex-508316-k6.iam.gserviceaccount.com
+      - uses: google-github-actions/setup-gcloud@v3.0.1
+      - run: >
+          gcloud compute ssh rainbowroadbook-app-vm
+          --project=agile-vortex-508316-k6
+          --zone=us-central1-a
+          --tunnel-through-iap
+          --quiet
+          --command="whoami && hostname"
