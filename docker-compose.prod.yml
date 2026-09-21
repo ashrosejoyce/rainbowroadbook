@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
 
   api:
-    build: ./api
+    image: us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/api:${IMAGE_TAG:?IMAGE_TAG must be set}
     env_file: .env.prod
     environment:
       - DJANGO_SECRET_KEY
@@ -20,9 +20,7 @@ services:
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+    image: us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
     ports:
       - "3000:3000"
     depends_on:
