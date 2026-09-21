@@ -11,6 +11,8 @@ services:
   api:
     build: ./api
     env_file: .env.prod
+    environment:
+      - DJANGO_SECRET_KEY
     depends_on:
       - cloud-sql-proxy
     ports:
