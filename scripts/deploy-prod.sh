@@ -13,6 +13,6 @@ export DJANGO_SECRET_KEY IMAGE_TAG
 gcloud auth print-access-token | sudo docker login \
   -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
 
-sudo -E docker compose -f docker-compose.prod.yml pull
-sudo -E docker compose -f docker-compose.prod.yml up -d --remove-orphans
-sudo docker compose -f docker-compose.prod.yml ps
+sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml pull
+sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml up -d --remove-orphans
+sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml ps
