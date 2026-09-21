@@ -15,7 +15,7 @@ jobs:
           service_account: rainbowroadbook-ci@agile-vortex-508316-k6.iam.gserviceaccount.com
       - uses: google-github-actions/setup-gcloud@v3.0.1
       - run: >
-          gcloud compute scp docker-compose.prod.yml
+          gcloud compute scp docker-compose.prod.yml scripts/deploy-prod.sh
           rainbowroadbook-app-vm:/opt/rainbowroadbook-deploy/
           --project=agile-vortex-508316-k6
           --zone=us-central1-a
@@ -27,4 +27,4 @@ jobs:
           --zone=us-central1-a
           --tunnel-through-iap
           --quiet
-          --command="ls -la /opt/rainbowroadbook-deploy"
+          --command="IMAGE_TAG=${{ github.sha }} bash /opt/rainbowroadbook-deploy/deploy-prod.sh"
