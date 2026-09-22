@@ -15,4 +15,5 @@ gcloud auth print-access-token | sudo docker login \
 
 sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml pull
 sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml up -d --remove-orphans
+sudo docker image prune -af
 sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml ps

@@ -31,6 +31,14 @@ resource "google_compute_instance" "app_vm" {
 
   metadata = {
     enable-oslogin = "TRUE"
+    startup-script = <<-EOT
+      #!/usr/bin/env bash
+      set -euo pipefail
+      cat > /etc/cron.weekly/rainbowroadbook-housekeeping <<'SCRIPT'
+      ${file("${path.module}/../scripts/vm-housekeeping.sh")}
+      SCRIPT
+      chmod +x /etc/cron.weekly/rainbowroadbook-housekeeping
+    EOT
   }
 
   shielded_instance_config {
