@@ -7,6 +7,11 @@ services:
       - "--auto-iam-authn"
       - "agile-vortex-508316-k6:us-central1:rainbow-roadbook-db"
     restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   api:
     image: us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/api:${IMAGE_TAG:?IMAGE_TAG must be set}
@@ -18,6 +23,11 @@ services:
     ports:
       - "8000:8000"
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   frontend:
     image: us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
@@ -25,3 +35,8 @@ services:
       - "3000:3000"
     depends_on:
       - api
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
