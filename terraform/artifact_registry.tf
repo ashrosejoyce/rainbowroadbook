@@ -1,6 +1,6 @@
 resource "google_artifact_registry_repository" "images" {
   repository_id = "rainbowroadbook-images"
-  location      = "us-central1"
+  location      = var.region
   format        = "DOCKER"
   description   = "Docker Images for API and frontend containers"
 

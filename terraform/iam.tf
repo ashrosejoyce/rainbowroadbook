@@ -19,13 +19,13 @@ resource "google_artifact_registry_repository_iam_member" "vm_reader" {
   repository = google_artifact_registry_repository.images.name
   location   = google_artifact_registry_repository.images.location
   role       = "roles/artifactregistry.reader"
-  member     = "serviceAccount:523773459301-compute@developer.gserviceaccount.com"
+  member     = "serviceAccount:${local.vm_service_account_email}"
 }
 
 resource "google_secret_manager_secret_iam_member" "vm_secret_accessor" {
   secret_id = google_secret_manager_secret.django_secret_key.secret_id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:523773459301-compute@developer.gserviceaccount.com"
+  member    = "serviceAccount:${local.vm_service_account_email}"
 }
 
 resource "google_project_iam_custom_role" "ci_ssh_discovery" {
@@ -37,7 +37,7 @@ resource "google_project_iam_custom_role" "ci_ssh_discovery" {
 }
 
 resource "google_project_iam_member" "ci_ssh_discovery" {
-  project = "agile-vortex-508316-k6"
+  project = var.project_id
   role    = google_project_iam_custom_role.ci_ssh_discovery.name
   member  = "serviceAccount:${google_service_account.ci.email}"
 }
@@ -55,7 +55,7 @@ resource "google_iam_workload_identity_pool_provider" "github_actions" {
   workload_identity_pool_id          = google_iam_workload_identity_pool.github.workload_identity_pool_id
   workload_identity_pool_provider_id = "rainbowroadbook-github-actions"
 
-  attribute_condition = "assertion.repository=='ashrosejoyce/rainbowroadbook' && assertion.ref=='refs/heads/main'"
+  attribute_condition = "assertion.repository=='${var.github_repo}' && assertion.ref=='refs/heads/main'"
 
   attribute_mapping = {
     "attribute.repository" = "assertion.repository"
@@ -74,7 +74,7 @@ resource "google_iam_workload_identity_pool_provider" "github_actions" {
 resource "google_service_account_iam_member" "wif_impersonation" {
   service_account_id = google_service_account.ci.name
   role                = "roles/iam.workloadIdentityUser"
-  member              = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/ashrosejoyce/rainbowroadbook"
+  member              = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repo}"
 
   lifecycle {
     prevent_destroy = true
@@ -96,26 +96,26 @@ resource "google_compute_instance_iam_member" "ash_os_admin_login" {
 }
 
 resource "google_service_account_iam_member" "ci_vm_sa_user" {
-  service_account_id = "projects/agile-vortex-508316-k6/serviceAccounts/523773459301-compute@developer.gserviceaccount.com"
+  service_account_id = "projects/${var.project_id}/serviceAccounts/${local.vm_service_account_email}"
   role                = "roles/iam.serviceAccountUser"
   member              = "serviceAccount:${google_service_account.ci.email}"
 }
 
 resource "google_project_iam_member" "vm_sql_client" {
-  project = "agile-vortex-508316-k6"
+  project = var.project_id
   role    = "roles/cloudsql.client"
-  member  = "serviceAccount:523773459301-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:${local.vm_service_account_email}"
 }
 
 resource "google_project_iam_member" "vm_sql_instance_user" {
-  project = "agile-vortex-508316-k6"
+  project = var.project_id
   role    = "roles/cloudsql.instanceUser"
-  member  = "serviceAccount:523773459301-compute@developer.gserviceaccount.com"
+  member  = "serviceAccount:${local.vm_service_account_email}"
 }
 
 resource "google_iap_tunnel_instance_iam_member" "ci_iap_tunnel_vm" {
-  project  = "agile-vortex-508316-k6"
-  zone     = "us-central1-a"
+  project  = var.project_id
+  zone     = var.zone
   instance = google_compute_instance.app_vm.name
   role     = "roles/iap.tunnelResourceAccessor"
   member   = "serviceAccount:${google_service_account.ci.email}"
