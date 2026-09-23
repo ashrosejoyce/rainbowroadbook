@@ -4,7 +4,7 @@ resource "google_compute_instance" "app_vm" {
   zone         = "us-central1-a"
   tags         = ["rainbowroadbook-app"]
 
-  deletion_protection = false
+  deletion_protection = true
 
   boot_disk {
     initialize_params {
