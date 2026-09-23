@@ -4,4 +4,8 @@ resource "google_secret_manager_secret" "django_secret_key" {
   replication {
     auto {}
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

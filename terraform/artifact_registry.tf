@@ -20,4 +20,8 @@ resource "google_artifact_registry_repository" "images" {
       keep_count = 10
     }
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }

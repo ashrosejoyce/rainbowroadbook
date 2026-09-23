@@ -21,4 +21,8 @@ resource "google_compute_firewall" "allow_iap_ssh" {
     protocol = "tcp"
     ports    = ["22"]
   }
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
