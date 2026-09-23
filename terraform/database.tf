@@ -35,7 +35,7 @@ resource "google_sql_database_instance" "db" {
       zone = "us-central1-c"
     }
 
-    deletion_protection_enabled = false
+    deletion_protection_enabled = true
   }
 
   lifecycle {
