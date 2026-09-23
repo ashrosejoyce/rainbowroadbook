@@ -26,3 +26,18 @@ resource "google_compute_firewall" "allow_iap_ssh" {
     prevent_destroy = true
   }
 }
+
+resource "google_compute_firewall" "allow_web" {
+  name      = "rainbowroadbook-allow-web"
+  network   = "default"
+  direction = "INGRESS"
+  priority  = 1000
+
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["rainbowroadbook-app"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+}
