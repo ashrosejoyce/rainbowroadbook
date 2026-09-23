@@ -1,7 +1,7 @@
 resource "google_compute_instance" "app_vm" {
   name         = "rainbowroadbook-app-vm"
   machine_type = "e2-small"
-  zone         = "us-central1-a"
+  zone         = var.zone
   tags         = ["rainbowroadbook-app"]
 
   deletion_protection = true
@@ -25,7 +25,7 @@ resource "google_compute_instance" "app_vm" {
   }
 
   service_account {
-    email  = "523773459301-compute@developer.gserviceaccount.com"
+    email  = local.vm_service_account_email
     scopes = ["cloud-platform"]
   }
 
@@ -34,6 +34,9 @@ resource "google_compute_instance" "app_vm" {
     startup-script = <<-EOT
       #!/usr/bin/env bash
       set -euo pipefail
+
+      ${file("${path.module}/../scripts/vm-bootstrap.sh")}
+
       cat > /etc/cron.weekly/rainbowroadbook-housekeeping <<'SCRIPT'
       ${file("${path.module}/../scripts/vm-housekeeping.sh")}
       SCRIPT

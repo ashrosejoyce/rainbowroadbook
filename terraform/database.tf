@@ -1,7 +1,7 @@
 resource "google_sql_database_instance" "db" {
   name             = "rainbow-roadbook-db"
   database_version = "POSTGRES_18"
-  region           = "us-central1"
+  region           = var.region
 
   settings {
     tier              = "db-f1-micro"
@@ -71,7 +71,7 @@ resource "google_sql_user" "app" {
 }
 
 resource "google_sql_user" "vm_iam" {
-  name     = "523773459301-compute@developer"
+  name     = local.vm_iam_db_user
   instance = google_sql_database_instance.db.name
   type     = "CLOUD_IAM_SERVICE_ACCOUNT"
 }
