@@ -65,13 +65,20 @@ resource "google_iam_workload_identity_pool_provider" "github_actions" {
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
   }
-}
 
+  lifecycle {
+    prevent_destroy = true
+  }
+}
 
 resource "google_service_account_iam_member" "wif_impersonation" {
   service_account_id = google_service_account.ci.name
   role                = "roles/iam.workloadIdentityUser"
   member              = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/ashrosejoyce/rainbowroadbook"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "google_compute_instance_iam_member" "ci_os_admin_login" {
