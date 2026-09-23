@@ -30,5 +30,5 @@ variable "github_repo" {
 
 locals {
   vm_service_account_email = "${var.project_number}-compute@developer.gserviceaccount.com"
-  vm_iam_db_user            = "${var.project_number}-compute@developer"
+  vm_iam_db_user           = "${var.project_number}-compute@developer"
 }

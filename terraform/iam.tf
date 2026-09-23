@@ -73,8 +73,8 @@ resource "google_iam_workload_identity_pool_provider" "github_actions" {
 
 resource "google_service_account_iam_member" "wif_impersonation" {
   service_account_id = google_service_account.ci.name
-  role                = "roles/iam.workloadIdentityUser"
-  member              = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repo}"
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repo}"
 
   lifecycle {
     prevent_destroy = true
@@ -97,8 +97,8 @@ resource "google_compute_instance_iam_member" "ash_os_admin_login" {
 
 resource "google_service_account_iam_member" "ci_vm_sa_user" {
   service_account_id = "projects/${var.project_id}/serviceAccounts/${local.vm_service_account_email}"
-  role                = "roles/iam.serviceAccountUser"
-  member              = "serviceAccount:${google_service_account.ci.email}"
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.ci.email}"
 }
 
 resource "google_project_iam_member" "vm_sql_client" {
