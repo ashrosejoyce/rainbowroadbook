@@ -1,8 +1,6 @@
 {
       # Account contact for Let's Encrypt (optional)
       email ash@rainbowroadbook.org
-      # TESTING ONLY: Let's Encrypt staging. Remove in Step 7 for real certs.
-      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
 }
 
 rainbowroadbook.org {
@@ -10,7 +8,7 @@ rainbowroadbook.org {
 }
 
 www.rainbowroadbook.org, rainbowroadbook.com, www.rainbowroadbook.com {
-      redir https://rainbowroadbook.org{uri}
+      redir https://rainbowroadbook.org{uri} permanent
 }
 
 admin.rainbowroadbook.org {
