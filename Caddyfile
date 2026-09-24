@@ -1,0 +1,27 @@
+{
+      # Account contact for Let's Encrypt (optional)
+      email ash@rainbowroadbook.org
+      # TESTING ONLY: Let's Encrypt staging. Remove in Step 7 for real certs.
+      acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+rainbowroadbook.org {
+      reverse_proxy frontend:3000
+}
+
+www.rainbowroadbook.org, rainbowroadbook.com, www.rainbowroadbook.com {
+      redir https://rainbowroadbook.org{uri}
+}
+
+admin.rainbowroadbook.org {
+      redir / /admin/
+
+      @django path /admin /admin/* /static/*
+      handle @django {
+              reverse_proxy api:8000
+      }
+
+      handle {
+              respond 404
+      }
+}

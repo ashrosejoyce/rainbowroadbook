@@ -30,6 +30,12 @@ DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
 ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=[])
 
+# Behind Caddy: trust its header saying the original request was HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Only send login/CSRF cookies over HTTPS (local dev over plain http opts out via .env)
+SESSION_COOKIE_SECURE = env.bool('DJANGO_SECURE_COOKIES', default=True)
+CSRF_COOKIE_SECURE = SESSION_COOKIE_SECURE
 
 # Application definition
 

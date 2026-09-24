@@ -15,7 +15,7 @@ jobs:
           service_account: rainbowroadbook-ci@agile-vortex-508316-k6.iam.gserviceaccount.com
       - uses: google-github-actions/setup-gcloud@v3.0.1
       - run: >
-          gcloud compute scp docker-compose.prod.yml scripts/deploy-prod.sh
+          gcloud compute scp docker-compose.prod.yml scripts/deploy-prod.sh Caddyfile
           rainbowroadbook-app-vm:/opt/rainbowroadbook-deploy/
           --project=agile-vortex-508316-k6
           --zone=us-central1-a

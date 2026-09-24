@@ -66,6 +66,14 @@ resource "google_dns_record_set" "org_dmarc" {
   rrdatas      = ["\"v=DMARC1; p=none; rua=mailto:ash@rainbowroadbook.org; pct=100; adkim=s; aspf=s\""]
 }
 
+resource "google_dns_record_set" "org_admin_a" {
+  managed_zone = google_dns_managed_zone.org.name
+  name         = "admin.${google_dns_managed_zone.org.dns_name}"
+  type         = "A"
+  ttl          = 300
+  rrdatas      = [google_compute_address.app_ip.address]
+}
+
 # --- rainbowroadbook.com (redirects to .org; the 301 itself comes from the proxy in Phase G) ---
 
 resource "google_dns_managed_zone" "com" {
