@@ -1,25 +1,32 @@
 {
-      # Account contact for Let's Encrypt (optional)
-      email ash@rainbowroadbook.org
+    # Account contact for Let's Encrypt (optional)
+    email ash@rainbowroadbook.org
+}
+
+(hsts) {
+    header Strict-Transport-Security "max-age=86400; includeSubDomains"
 }
 
 rainbowroadbook.org {
-      reverse_proxy frontend:3000
+    import hsts
+    reverse_proxy frontend:3000
 }
 
 www.rainbowroadbook.org, rainbowroadbook.com, www.rainbowroadbook.com {
-      redir https://rainbowroadbook.org{uri} permanent
+    import hsts
+    redir https://rainbowroadbook.org{uri} permanent
 }
 
 admin.rainbowroadbook.org {
-      redir / /admin/
+    import hsts
+    redir / /admin/
 
-      @django path /admin /admin/* /static/*
-      handle @django {
-              reverse_proxy api:8000
-      }
+    @django path /admin /admin/* /static/*
+    handle @django {
+          reverse_proxy api:8000
+    }
 
-      handle {
-              respond 404
-      }
+    handle {
+          respond 404
+    }
 }
