@@ -68,7 +68,7 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@vX.Y.Z   # pin to the current release, like your other actions
+      - uses: actions/setup-node@v7.0.0
         with:
           node-version: "20"              # matches node:20-slim in your Dockerfiles
           cache: npm
