@@ -58,4 +58,22 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -r requirements-dev.txt
+      - run: pip install -r requirements-dev.txt
+      - run: python manage.py makemigrations --check --dry-run
       - run: pytest
+  frontend-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@vX.Y.Z   # pin to the current release, like your other actions
+        with:
+          node-version: "20"              # matches node:20-slim in your Dockerfiles
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npx vitest run
