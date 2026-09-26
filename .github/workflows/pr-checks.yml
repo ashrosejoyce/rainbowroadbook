@@ -77,3 +77,13 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npx vitest run
+  infra-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Validate Caddyfile
+        run: >-
+          docker run --rm
+          -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro"
+          caddy:2.11
+          caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
