@@ -21,8 +21,9 @@ services:
     depends_on:
       - cloud-sql-proxy
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    restart: unless-stopped
     logging:
       driver: json-file
       options:
@@ -32,7 +33,8 @@ services:
   frontend:
     image: us-central1-docker.pkg.dev/agile-vortex-508316-k6/rainbowroadbook-images/frontend:${IMAGE_TAG:?IMAGE_TAG must be set}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
+    restart: unless-stopped
     depends_on:
       - api
     logging:
@@ -40,3 +42,26 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  caddy:
+    image: caddy:2.11
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - api
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  caddy_data:
+  caddy_config:
