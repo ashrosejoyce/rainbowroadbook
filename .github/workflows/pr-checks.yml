@@ -87,3 +87,15 @@ jobs:
           -v "$PWD/Caddyfile:/etc/caddy/Caddyfile:ro"
           caddy:2.11
           caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
+      - uses: hashicorp/setup-terraform@v4.0.1
+        with:
+          terraform_version: "1.16.3"            # match your local version (terraform -version)
+      - name: Terraform fmt
+        working-directory: terraform
+        run: terraform fmt -check -recursive
+      - name: Terraform init (no backend)
+        working-directory: terraform
+        run: terraform init -backend=false -input=false
+      - name: Terraform validate
+        working-directory: terraform
+        run: terraform validate
