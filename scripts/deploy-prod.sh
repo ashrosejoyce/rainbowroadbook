@@ -13,8 +13,13 @@ export DJANGO_SECRET_KEY IMAGE_TAG
 gcloud auth print-access-token | sudo docker login \
   -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
 
-sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml pull
-sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml up -d --remove-orphans
-sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml exec -T caddy caddy reload --config /etc/caddy/Caddyfile
+compose() {
+  sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml "$@"
+}
+
+compose pull
+compose run --rm api python manage.py migrate --noinput
+compose up -d --remove-orphans --wait --wait-timeout 120
+compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile
 sudo docker image prune -af
-sudo --preserve-env=DJANGO_SECRET_KEY,IMAGE_TAG docker compose -f docker-compose.prod.yml ps
+compose ps
