@@ -19,7 +19,7 @@ jobs:
         working-directory: api
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.13"
       - run: pip install -r requirements-dev.txt
@@ -54,7 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gdal-bin libgdal-dev libgeos-dev libproj-dev
-      - uses: actions/setup-python@v7.0.0
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.13"
       - run: pip install -r requirements-dev.txt
@@ -68,7 +68,7 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: actions/setup-node@v7.0.0
+      - uses: actions/setup-node@v7.1.0
         with:
           node-version: "26"              # matches node:20-slim in your Dockerfiles
           cache: npm
