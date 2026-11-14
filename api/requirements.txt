@@ -2,5 +2,5 @@ Django~=6.1
 djangorestframework~=3.18
 psycopg2-binary~=2.9
 django-environ~=0.14
-gunicorn~=26.2
+gunicorn~=27.0
 whitenoise~=6.12
